@@ -1,5 +1,7 @@
 # Enhanced Deja Brew
 
+[![Live — Main.html](https://img.shields.io/badge/Live-Main.html-brightgreen)](https://potatokevz.github.io/DejaBrew/Main.html) [![e2e 7/7](https://img.shields.io/badge/e2e-7%2F7-success)](tests/e2e/deja-brew.spec.js)
+
 Warm editorial, story-fused redesign of a first-year static coffeeshop site — now with a cohesive café identity and just-enough interactivity, still static.
 
 **Live:** `Main.html` → `MenuOrder.html` → `order-success.html` (3 routes) — deploy `Main.html` to GitHub Pages / Netlify static.
