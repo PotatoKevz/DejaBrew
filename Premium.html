@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>Deja Brew — Warm, rendered.</title>
+<meta name="description" content="Deja Brew — neighborhood café, rendered warm. Specialty coffee, fresh pastries, community.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}</script>
+<style>
+:root{
+  --bg:#05070a; --bg-2:#0b0f17; --surface:rgba(255,255,255,0.06); --surface-strong:rgba(255,255,255,0.09);
+  --border:rgba(255,255,255,0.07); --border-strong:rgba(255,255,255,0.13);
+  --text-primary:#f0f2f5; --text-secondary:#97a0b2; --text-muted:#6b7587;
+  --accent:#c7d9ec; --accent-strong:#e6eef7; --latte:#E8DAB2; --amber:#f0a500;
+  --radius-lg:24px; --radius-pill:999px; --blur-glass:18px;
+  --content-max:1180px; --nav-height:64px;
+  --display:"Instrument Serif", Georgia, serif; --sans:"Space Grotesk", system-ui, sans-serif; --mono:"JetBrains Mono", monospace;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text-primary);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:0.055;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
+a{color:inherit;text-decoration:none} .container{width:min(var(--content-max), calc(100% - 48px));margin-inline:auto}
+.mono{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-height);display:flex;align-items:center;border-bottom:1px solid transparent;background:linear-gradient(to bottom, rgba(5,7,10,0.65), transparent);backdrop-filter:blur(0px);transition:all .45s var(--ease-out)}
+.nav.scrolled{height:56px;background:rgba(7,10,15,0.72);backdrop-filter:blur(18px) saturate(1.2);border-color:var(--border)}
+.nav-inner{width:min(var(--content-max), calc(100% - 48px));margin-inline:auto;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.nav-logo{font-weight:600;letter-spacing:0.22em;font-size:13px;display:flex;align-items:center;gap:10px}
+.nav-logo-mark{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#d6e2f0 0%,#8ea8c3 55%,#5a6d85 100%);box-shadow:0 2px 12px rgba(160,190,220,0.35)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-secondary);transition:color .2s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-cta{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;background:var(--text-primary);color:#05070a;padding:10px 18px;border-radius:999px;font-weight:600;transition:all .2s}
+.nav-cta:hover{background:var(--accent-strong);transform:translateY(-1px)}
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding-top:var(--nav-height)}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(900px 700px at 50% 38%, rgba(232,218,178,0.12) 0%, transparent 68%),linear-gradient(180deg,#05070a 0%,#070a11 45%,#080c15 100%)}
+.hero-watermark{position:absolute;left:50%;top:46%;translate:-50% -50%;font-family:var(--display);font-size:min(34vw,520px);line-height:0.8;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,0.06);opacity:0.7;pointer-events:none;user-select:none}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero-content{position:relative;z-index:10;width:min(var(--content-max), calc(100% - 48px));margin-inline:auto;display:flex;flex-direction:column;align-items:center;text-align:center;padding:6vh 0 4vh}
+.status{display:inline-flex;align-items:center;gap:10px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(12px);margin-bottom:28px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#7de2c0;box-shadow:0 0 10px rgba(125,226,192,0.9)}
+.status-text{font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;color:var(--text-secondary)}
+.hero h1{font-family:var(--display);font-weight:400;letter-spacing:-0.04em;line-height:0.9;font-size:clamp(62px,9.2vw,132px);margin:0 0 18px}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero-copy{max-width:560px;margin:0 auto 32px;font-size:clamp(15px,1.8vw,18px);line-height:1.6;color:var(--text-secondary);font-weight:300}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:22px}
+.btn-primary{background:var(--text-primary);color:#05070a;padding:14px 26px;border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;display:inline-flex;align-items:center;gap:10px;transition:all .2s}
+.btn-primary:hover{background:var(--accent-strong)}
+.btn-secondary{border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);color:var(--text-primary);padding:13px 22px;border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;backdrop-filter:blur(12px)}
+.section{position:relative;padding:88px 0;overflow:hidden}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-label::before{content:"";width:18px;height:1px;background:var(--border-strong);display:inline-block}
+h2.section-title{font-family:var(--display);font-weight:400;letter-spacing:-0.03em;line-height:0.95;font-size:clamp(36px,5.2vw,64px);margin:0}
+h2.section-title em{font-style:italic;color:var(--accent)}
+.section-copy{color:var(--text-secondary);max-width:560px;font-size:15px;margin-top:14px;font-weight:300}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+@media(max-width:980px){.features-grid{grid-template-columns:1fr}}
+.feature-card{position:relative;border-radius:24px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.07) 0%,rgba(255,255,255,0.03) 100%);border:1px solid var(--border);backdrop-filter:blur(14px);min-height:420px;display:flex;flex-direction:column;transition:transform .45s var(--ease-out),border-color .35s}
+.feature-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.14)}
+.feature-visual{height:210px;overflow:hidden;background:#0a0f1a;border-bottom:1px solid var(--border);position:relative}
+.feature-visual img{width:100%;height:100%;object-fit:cover}
+.feature-body{padding:22px 22px 24px;flex:1;display:flex;flex-direction:column;gap:10px}
+.feature-kicker{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--latte)}
+.feature-card h3{font-family:var(--display);font-size:24px;margin:0}
+.feature-card p{margin:0;color:var(--text-secondary);font-size:13.5px;line-height:1.6;font-weight:300}
+.price-pill{display:inline-block;padding:6px 12px;background:var(--text-primary);color:#05070a;border-radius:999px;font-weight:700;font-size:11px;font-family:var(--mono)}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+@media(max-width:980px){.menu-grid{grid-template-columns:1fr 1fr} } @media(max-width:560px){.menu-grid{grid-template-columns:1fr} }
+.menu-card{border-radius:24px;overflow:hidden;background:rgba(255,255,255,0.05);border:1px solid var(--border);backdrop-filter:blur(14px);transition:transform .35s}
+.menu-card:hover{transform:translateY(-4px);border-color:rgba(232,218,178,0.18)}
+.menu-card img{width:100%;height:220px;object-fit:cover}
+.menu-card-body{padding:16px 16px 18px;text-align:center}
+.tag{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:4px 8px;border-radius:999px;background:var(--latte);color:#05070a}
+.footer{border-top:1px solid var(--border);padding:28px 0 36px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted)}
+</style>
+</head>
+<body>
+<nav class="nav" id="top-nav"><div class="nav-inner"><a href="Premium.html" class="nav-logo"><span class="nav-logo-mark"></span> DEJA BREW</a><div class="nav-links"><a href="#menu">Menu</a><a href="#about">About</a><a href="MenuOrder.html">Order</a></div><a href="MenuOrder.html" class="nav-cta">Order Now</a></div></nav>
+<main>
+<section class="hero"><div class="hero-bg"></div><div class="hero-watermark">BREW</div><canvas id="hero-canvas"></canvas><div class="hero-content"><div class="status"><span class="status-dot"></span><span class="status-text">BREWING / LIVE</span></div><h1>Warm,<br><em>rendered.</em></h1><p class="hero-copy">Deja Brew as NOVA would brew it — neighborhood warmth, specialty precision, rendered in glass, light, and a hint of film grain.</p><div class="hero-actions"><a href="MenuOrder.html" class="btn-primary">Explore Menu →</a><a href="#menu" class="btn-secondary">View Craft</a></div><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text-muted);display:flex;gap:14px"><span>EST 2024</span><span>•</span><span>Community • Quality • Craft</span></div></div></section>
+
+<section class="section" id="menu"><div class="container"><div class="section-label">Menu 01</div><h2 class="section-title">One menu.<br><em>Every craving.</em></h2><p class="section-copy">From Benguet bittersweet to Sagada floral — ten items, three filters, one LocalStorage cart that survives reload. No backend, all craft.</p><div class="menu-grid" id="menu-grid"></div><p style="text-align:center;margin-top:22px"><a href="MenuOrder.html" class="btn-secondary">Open Full Menu →</a></p></div></section>
+
+<section class="section" id="about"><div class="container"><div class="section-label">About 02</div><h2 class="section-title">More than<br><em>coffee.</em></h2><p class="section-copy">Community, quality, craft — a welcoming space where every cup is precision-poured. <a href="Main.html#about" style="color:var(--accent);text-decoration:underline">Our story →</a></p><div class="features-grid"><div class="feature-card"><div class="feature-visual"><img src="Coffeeshop.jpeg" alt="Shop"></div><div class="feature-body"><span class="feature-kicker">Community</span><h3>Stay & Connect</h3><p>A third place between home and work — stay, work, unwind.</p><span class="price-pill" style="margin-top:auto;align-self:flex-start">Daily 7am–8pm</span></div></div><div class="feature-card"><div class="feature-visual"><img src="Kape.jpg" alt="Quality"></div><div class="feature-body"><span class="feature-kicker">Quality</span><h3>Origin-Pulled</h3><p>Benguet, Sagada, Mt. Apo — 1,200–1,800 masl, shade-grown.</p><span class="price-pill" style="margin-top:auto;align-self:flex-start">Single-origin</span></div></div><div class="feature-card"><div class="feature-visual"><img src="Latte.jpeg" alt="Craft"></div><div class="feature-body"><span class="feature-kicker">Craft</span><h3>Poured Precise</h3><p>180°C light roast that keeps the region’s voice audible.</p><span class="price-pill" style="margin-top:auto;align-self:flex-start">Light → Dark</span></div></div></div></div></section>
+</main>
+<footer class="container footer"><span>© 2026 Deja Brew — Warm, rendered.</span><span><a href="Main.html">Classic</a> • <a href="Premium.html">Premium</a> • <a href="MenuOrder.html">Order</a></span></footer>
+
+<script type="module">
+import { catalog } from './data/catalog.js';
+const grid=document.getElementById('menu-grid');
+grid.innerHTML=catalog.slice(0,6).map(p=>`
+  <div class="menu-card">
+    <img src="${p.image}" alt="${p.name}">
+    <div class="menu-card-body">
+      <span class="tag">${p.tag}</span>
+      <h3 style="font-family:var(--display);font-size:22px;margin:8px 0 6px">${p.name}</h3>
+      <span class="price-pill">${p.display}</span>
+      <p style="color:var(--text-secondary);font-size:13px;margin:8px 0">${p.sensory}</p>
+      <p style="font-family:var(--mono);font-size:9px;color:var(--text-muted);letter-spacing:0.08em">${p.origin} • ${p.roast} • ${p.tasting.join(' • ')}</p>
+    </div>
+  </div>`).join('');
+// nav scrolled
+const nav=document.getElementById('top-nav');
+window.addEventListener('scroll',()=>{ if(window.scrollY>24) nav.classList.add('scrolled'); else nav.classList.remove('scrolled'); });
+// tiny three.js orb fallback - if three fails, show no orb
+try{
+  const THREE=await import('three');
+  const canvas=document.getElementById('hero-canvas');
+  const renderer=new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 100); camera.position.z=3.2;
+  const geo=new THREE.SphereGeometry(1.0,64,64);
+  const mat=new THREE.MeshPhysicalMaterial({color:0xc7d9ec, roughness:0.18, metalness:0.2, clearcoat:1, clearcoatRoughness:0.12});
+  const mesh=new THREE.Mesh(geo,mat); scene.add(mesh);
+  const light=new THREE.DirectionalLight(0xffffff,1.2); light.position.set(2,3,2); scene.add(light);
+  const amb=new THREE.AmbientLight(0xffffff,0.55); scene.add(amb);
+  function resize(){ renderer.setSize(innerWidth, innerHeight); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); }
+  addEventListener('resize',resize); resize();
+  let t=0; (function loop(){ requestAnimationFrame(loop); t+=0.006; mesh.rotation.y+=0.002; mesh.position.y=Math.sin(t)*0.08; renderer.render(scene,camera); })();
+}catch(e){ document.getElementById('hero-canvas').style.display='none'; }
+</script>
+</body>
+</html>
