@@ -24,15 +24,17 @@
         <div id="progress-bar"></div>
     </nav>
 
-    <section class="intro">
-        <div class="container">
+    <section class="intro" id="hero" style="position:relative; overflow:hidden; isolation:isolate;">
+        <div class="hero-watermark" aria-hidden="true" style="position:absolute;left:50%;top:48%;translate:-50% -50%;font-family:'Playfair Display',serif;font-size:min(34vw,520px);line-height:0.8;color:transparent;-webkit-text-stroke:1px rgba(51,51,51,0.06);opacity:0.5;pointer-events:none;user-select:none">DEJA</div>
+        <div class="hero-dust" id="hero-dust" aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden"></div>
+        <div class="container" style="position:relative; z-index:2;">
             <div class="hero-copy">
                 <h1>Welcome to Deja Brew</h1>
                 <p>Your cozy spot for the finest coffee and treats — roasted with care, served with craft.</p>
                 <p class="customer-message">Contactless pickup & delivery • Fresh at 7am daily</p>
-                <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                    <a href="MenuOrder.html" class="btn btn-primary">Explore Our Menu</a>
-                    <a href="MenuOrder.html#mood" class="btn">Find my vibe</a>
+                <div style="display:flex; gap:14px; flex-wrap:wrap;">
+                    <span class="magnetic-wrap" data-magnetic><span class="magnetic-inner"><a href="MenuOrder.html" class="btn btn-primary">Explore Our Menu →</a></span></span>
+                    <span class="magnetic-wrap" data-magnetic><span class="magnetic-inner"><a href="MenuOrder.html#mood" class="btn">Find my vibe</a></span></span>
                 </div>
             </div>
             <div class="hero-visual">
@@ -161,6 +163,36 @@
   const io=new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); });},{threshold:0.12});
   document.querySelectorAll('.menu-item').forEach(el=>io.observe(el));
   window.subscribe=(e)=>{ e.preventDefault(); const input=document.getElementById('brew-email'); const email=(input&&input.value||'').trim(); if(!email||!email.includes('@')){ alert('Enter a valid email'); return; } try{ const list=JSON.parse(localStorage.getItem('deja-brew-subscribers')||'[]'); if(!list.includes(email)) list.push(email); localStorage.setItem('deja-brew-subscribers', JSON.stringify(list)); input.value=''; alert('Welcome to the Brew Club — '+email+' — demo saved locally ✓'); }catch(_){ alert('Subscribed — '+email); } };
+  // alive: magnetic buttons, dust steam, watermark parallax, nav scrolled
+  const navEl=document.querySelector('.navbar');
+  window.addEventListener('scroll', ()=>{ if(window.scrollY>24) navEl.classList.add('scrolled'); else navEl.classList.remove('scrolled'); }, {passive:true});
+  // magnetic
+  document.querySelectorAll('[data-magnetic]').forEach(wrap=>{
+    const inner=wrap.querySelector('.magnetic-inner');
+    if(!inner) return;
+    wrap.addEventListener('mousemove', e=>{
+      const rect=wrap.getBoundingClientRect();
+      const x=e.clientX-rect.left-rect.width/2, y=e.clientY-rect.top-rect.height/2;
+      inner.style.transform=`translate(${x*0.18}px,${y*0.35}px)`;
+    });
+    wrap.addEventListener('mouseleave', ()=>{ inner.style.transform='translate(0,0)'; });
+  });
+  // dust steam - warm specks
+  const dust=document.getElementById('hero-dust'); if(dust){
+    for(let i=0;i<18;i++){
+      const s=document.createElement('span');
+      s.style.left=Math.random()*100+'%'; s.style.top=(60+Math.random()*40)+'%';
+      s.style.animation=`dustFloat ${6+Math.random()*8}s ease-in-out ${Math.random()*4}s infinite`;
+      s.style.animationDelay=Math.random()*5+'s';
+      dust.appendChild(s);
+    }
+    const style=document.createElement('style');
+    style.textContent='@keyframes dustFloat{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:0.7}50%{transform:translateY(-80px) translateX('+ (Math.random()>0.5?6:-6)+'px);opacity:0.4}100%{transform:translateY(-160px) translateX(0);opacity:0}}';
+    document.head.appendChild(style);
+  }
+  // watermark parallax
+  const wm=document.querySelector('.hero-watermark');
+  if(wm) window.addEventListener('scroll', ()=>{ const y=window.scrollY*0.18; wm.style.transform=`translate(-50%, calc(-50% + ${y}px))`; }, {passive:true});
 })();
 </script>
 </body>
