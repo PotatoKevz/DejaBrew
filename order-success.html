@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Successfully Placed — Deja Brew</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="Main.html">
+                <i class="fas fa-mug-hot"></i> Deja Brew
+            </a>
+            <ul class="navbar-links">
+                <li><a href="Main.html">Home</a></li>
+                <li><a href="MenuOrder.html">Menu</a></li>
+                <li><a href="Main.html#about">About</a></li>
+                <li><a href="Main.html#contact">Contact</a></li>
+            </ul>
+        </div>
+        <div id="progress-bar"></div>
+    </nav>
+
+    <section class="order-success text-center">
+        <div class="container">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h1>Thank You for Your Order!</h1>
+            <p>Your order has been placed successfully. We’re excited to prepare it for you!</p>
+            <p>Estimated delivery time: 30 minutes</p>
+            <div id="receipt" class="receipt-card"></div>
+            <a href="MenuOrder.html" class="btn btn-primary" style="margin-top:16px;">Order Again</a>
+
+            <div class="cross-sell">
+                <h3 style="font-family:Inter,sans-serif; font-size:1rem; margin-top:22px;">People also ordered</h3>
+                <div class="cross-sell-grid">
+                    <div class="mini-card"><img src="Donut.jpg" alt="Donut"><h4 style="margin:6px 0 4px; font-size:0.95rem;">Donut</h4><span class="price-pill">₱30.00</span><br><a href="MenuOrder.html" class="btn order-btn" style="margin-top:8px;">View</a></div>
+                    <div class="mini-card"><img src="Americano-coffee.jpg" alt="Americano"><h4 style="margin:6px 0 4px; font-size:0.95rem;">Americano</h4><span class="price-pill">₱101.00</span><br><a href="MenuOrder.html" class="btn order-btn" style="margin-top:8px;">View</a></div>
+                    <div class="mini-card"><img src="Macaron.jpg" alt="Macaron"><h4 style="margin:6px 0 4px; font-size:0.95rem;">Macaron</h4><span class="price-pill">₱330.00 /box</span><br><a href="MenuOrder.html" class="btn order-btn" style="margin-top:8px;">View</a></div>
+                </div>
+                <button class="btn" style="margin-top:14px;" onclick="shareReceipt()">Share your brew</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 Deja Brew Coffee Shop. All Rights Reserved.</p>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/profile.php?id=100088182587477" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/cafedejabrew/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+<script type="module">
+import { catalog } from './data/catalog.js';
+function safeCart(){ try{ const v=JSON.parse(localStorage.getItem('deja-brew-cart')||'[]'); return Array.isArray(v)?v:[];}catch(e){ try{localStorage.removeItem('deja-brew-cart');}catch(_){} return [];}}
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+const cart=safeCart();
+const el=document.getElementById('receipt');
+if(cart.length===0){ el.innerHTML='<p style="color:var(--muted)">No items in cart — this was a direct Order Now.</p><p style="font-size:0.85rem; color:var(--muted); margin-top:6px;">Tip: use Add to cart on MenuOrder for a receipt.</p>'; }
+else {
+  let total=0; const rows=cart.map(i=>{ const p=catalog.find(c=>c.id===i.id); if(!p) return ''; const qty=Math.max(0,Math.trunc(Number(i.qty)||0)); const line=(Number(p.price)||0)*qty; total+=line; return `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line)"><span>${esc(p.name)} × ${qty}</span><span>${esc(p.display)} × ${qty}</span></div>`;}).join('');
+  el.innerHTML=`<h4 style="margin:0 0 8px;">Receipt — ${new Date().toLocaleDateString()}</h4>${rows}<div style="display:flex; justify-content:space-between; font-weight:700; margin-top:8px;"><span>Total</span><span>₱${total.toFixed(2)}</span></div><button class="btn" style="margin-top:10px; width:100%;" onclick="reorder()">Reorder</button>`;
+}
+window.reorder=()=>{ try{ const c=safeCart(); if(c.length===0) return; localStorage.setItem('deja-brew-cart', JSON.stringify(c)); location.href='MenuOrder.html'; }catch(e){}};
+window.shareReceipt= async ()=>{ const text='I just ordered from Deja Brew — cozy & crafted!'; if(navigator.share){ try{ await navigator.share({title:'Deja Brew', text}); return; }catch(e){ if(e && e.name==='AbortError') return; } } try{ if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(text); alert('Copied: '+text); } else { prompt('Copy your brew:', text); } }catch(e){ prompt('Copy your brew:', text); } };
+window.addEventListener('scroll', ()=>{ const h=document.documentElement; const d=h.scrollHeight-h.clientHeight; const pct=d>0?(h.scrollTop/d)*100:0; const bar=document.getElementById('progress-bar'); if(bar) bar.style.width=pct+'%';});
+</script>
+</body>
+</html>

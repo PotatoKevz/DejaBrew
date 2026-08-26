@@ -1,0 +1,28 @@
+- id: "1"
+  title: Foundations and pitfall fix
+  description: >-
+    Fix order-success.html:19 malformed anchor, replace Arial with Playfair Display + Inter, apply palette #E8DAB2/#333/#f0a500 + #FFF8F0 cards, image-first 220px rounded-2xl, shadow/radius per design-system.md, Menuuu.jpg 5% texture, preserve 768px column switch and image casing.
+- id: "2"
+  title: Hero and story-fused single scroll
+  description: >-
+    Implement split dark #333 hero with #E8DAB2 text and floating badge, values ribbon and #about anchor from About.html, featured 3+3 clickable cards, single CTA hierarchy eliminating duplicate View Products.
+- id: "3"
+  title: Unified filterable menu
+  description: >-
+    Consolidate CoffeeOrder and BakeryOrder into one MenuOrder view with tabs All | Coffee | Pastry, value-as-tag and Gluten Free chips, pill ₱ prices and ≤8-word sensory lines, pastry-first toggle option.
+- id: "4"
+  title: Guided navigation and progress
+  description: >-
+    Make navbar sticky and render thin #f0a500 scroll-progress bar synchronized to menu length.
+- id: "5"
+  title: Demo cart drawer
+  description: >-
+    Add slide-out mini-cart with +/- quantities persisted to LocalStorage, navbar count badge, without changing Order Now → order-success.html link.
+- id: "6"
+  title: Enriched catalog and footer
+  description: >-
+    Populate origin/roast/tasting notes per menu-catalog.md and footer opening hours, micro-map dot and IG photo strip using real cafe imagery.
+- id: "7"
+  title: Mood picker and success extension
+  description: >-
+    Add Cozy/Bold mood picker recommending items and enrich success with People also ordered mini-cards and shareable receipt plus Reorder.

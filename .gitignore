@@ -1,0 +1,6 @@
+node_modules/
+test-results/
+playwright-report/
+_bmad-output/planning-artifacts/research/
+_bmad-output/brainstorming/
+.opencode/node_modules/

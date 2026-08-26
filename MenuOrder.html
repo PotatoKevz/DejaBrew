@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order — Deja Brew</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="Main.html"><i class="fas fa-mug-hot"></i> Deja Brew</a>
+            <ul class="navbar-links">
+                <li><a href="Main.html">Home</a></li>
+                <li><a href="Main.html#about">About</a></li>
+                <li><a href="Main.html#contact">Contact</a></li>
+                <li><a href="javascript:void(0)" onclick="document.getElementById('cart-drawer').classList.add('open'); return false;">Cart <span id="cart-badge" class="cart-badge" style="display:none">0</span></a></li>
+            </ul>
+        </div>
+        <div id="progress-bar"></div>
+    </nav>
+
+    <section class="section text-center">
+        <div class="container">
+            <h2>Our Menu</h2>
+            <p style="color:var(--muted)">One menu, all your favorites — filter by what you crave.</p>
+
+            <div id="mood" class="mood-picker">
+                <div class="mood-card" role="button" tabindex="0" onclick="applyMood('cozy')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();applyMood('cozy')}"><h3>☕ Cozy & Creamy</h3><p style="color:var(--muted); font-size:0.85rem;">Latte, Muffin, Macaron</p></div>
+                <div class="mood-card" role="button" tabindex="0" onclick="applyMood('bold')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();applyMood('bold')}"><h3>⚡ Bold & Strong</h3><p style="color:var(--muted); font-size:0.85rem;">Espresso, Americano, Kringle</p></div>
+                <div class="mood-card" role="button" tabindex="0" onclick="applyMood('all')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();applyMood('all')}"><h3>✨ Show me all</h3><p style="color:var(--muted); font-size:0.85rem;">Pastry-first toggle available</p></div>
+            </div>
+
+            <div class="filter-bar">
+                <button class="filter-pill active" data-filter="all" onclick="setFilter('all')">All</button>
+                <button class="filter-pill" data-filter="coffee" onclick="setFilter('coffee')">Coffee</button>
+                <button class="filter-pill" data-filter="pastry" onclick="setFilter('pastry')">Pastries</button>
+                <button class="filter-pill" data-filter="Gluten Free" onclick="setFilter('Gluten Free')">Gluten Free</button>
+                <button class="filter-pill" data-filter="Craft" onclick="setFilter('Craft')">Craft</button>
+                <label style="margin-left:10px; font-size:0.85rem;"><input type="checkbox" id="pastry-first"> Pastry first</label>
+                <input id="search" placeholder="Search citrus, chocolate..." style="margin-left:12px; padding:8px 12px; border-radius:999px; border:1px solid var(--line); font-size:0.85rem;" oninput="render()">
+            </div>
+
+            <div id="menu-grid" class="menu-grid"></div>
+        </div>
+    </section>
+
+    <footer class="footer"><p>&copy; 2024 Deja Brew Coffee Shop. All Rights Reserved.</p>
+        <div class="social-icons"><a href="https://www.facebook.com/profile.php?id=100088182587477" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a><a href="https://www.instagram.com/cafedejabrew/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a></div>
+    </footer>
+
+    <div id="cart-drawer" class="cart-drawer">
+        <h3 style="font-family:Inter,sans-serif; font-size:1.05rem;">Your cart <span id="cart-count">0</span></h3>
+        <div id="cart-items" style="margin-top:14px;"></div>
+        <a href="order-success.html" class="btn btn-primary" style="margin-top:16px; display:block; text-align:center;">Order Now</a>
+        <button class="btn" style="margin-top:8px; width:100%;" onclick="document.getElementById('cart-drawer').classList.remove('open'); document.getElementById('cart-backdrop').style.display='none';">Continue browsing</button>
+    </div>
+
+<script type="module">
+import { catalog } from './data/catalog.js';
+let activeFilter='all'; let mood='all';
+function safeCart(){ try{ const v=JSON.parse(localStorage.getItem('deja-brew-cart')||'[]'); return Array.isArray(v)?v:[];}catch(e){ try{localStorage.removeItem('deja-brew-cart');}catch(_){} return [];}}
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+window.setFilter=(f)=>{ activeFilter=f; document.querySelectorAll('.filter-pill').forEach(p=>p.classList.toggle('active', p.dataset.filter===f)); render(); };
+window.applyMood=(m)=>{ mood=m; if(m==='cozy') setFilter('all'); else if(m==='bold') setFilter('all'); const order=document.getElementById('pastry-first'); if(order){ if(m==='cozy') order.checked=true; else if(m==='bold') order.checked=false; } render(); };
+const pfEl=document.getElementById('pastry-first'); if(pfEl) pfEl.addEventListener('change', render);
+const grid=document.getElementById('menu-grid');
+const search=document.getElementById('search');
+function addToCart(id){ try{ if(!catalog.some(x=>x.id===id)) return; let c=safeCart(); const f=c.find(x=>x.id===id); if(f) f.qty=Math.max(1,(Number(f.qty)||1)+1); else c.push({id,qty:1}); localStorage.setItem('deja-brew-cart',JSON.stringify(c)); updateBadge(); renderCart(); const d=document.getElementById('cart-drawer'); if(d) d.classList.add('open'); const bd=document.getElementById('cart-backdrop'); if(bd) bd.style.display='block'; }catch(e){} }
+window.addToCart=addToCart;
+function updateBadge(){ try{ const c=safeCart(); const sum=(Array.isArray(c)?c:[]).reduce((a,b)=>a+(Number(b.qty)||0),0); const b=document.getElementById('cart-badge'); if(b){ if(sum>0){b.textContent=sum; b.style.display='inline-flex';} else b.style.display='none';} const cc=document.getElementById('cart-count'); if(cc) cc.textContent=sum; }catch(e){} }
+function renderCart(){ try{ const c=safeCart(); const el=document.getElementById('cart-items'); if(!el) return; if(c.length===0){ el.innerHTML='<p style="color:var(--muted); font-size:0.9rem;">Cart empty — add something delicious.</p>'; return; } el.innerHTML=c.map(item=>{ const p=catalog.find(x=>x.id===item.id); if(!p) return ''; return `<div style="display:flex; justify-content:space-between; align-items:center; border:1px solid var(--line); border-radius:10px; padding:8px 10px; margin-bottom:8px;"><span><b>${esc(p.name)}</b> <span style="color:var(--muted); font-size:0.8rem;">${esc(p.display)}</span></span><span><button onclick="changeQty('${esc(item.id)}',-1)">−</button> ${Number(item.qty)||0} <button onclick="changeQty('${esc(item.id)}',1)">+</button></span></div>`;}).join(''); }catch(e){} }
+window.changeQty=(id,delta)=>{ try{ delta=Number(delta); if(!Number.isFinite(delta)) return; let c=safeCart(); const f=c.find(x=>x.id===id); if(!f) return; f.qty=Math.max(0,Math.trunc(Number(f.qty)||0)+Math.trunc(delta)); if(f.qty<=0) c=c.filter(x=>x.id!==id); localStorage.setItem('deja-brew-cart',JSON.stringify(c)); updateBadge(); render(); renderCart(); }catch(e){} };
+function render(){
+  const q=((search&&search.value)||'').toLowerCase();
+  let list=[...catalog];
+  if(activeFilter!=='all'){ list=list.filter(x=> x.type===activeFilter || x.tag===activeFilter); }
+  if(mood==='bold'){ list=list.filter(x=> ['M-C-01','M-C-02','M-P-03'].includes(x.id)); }
+  else if(mood==='cozy'){ /* cozy keeps all but pastry-first checked handles ordering */ }
+  if(q){ list=list.filter(x=> { const tast=Array.isArray(x.tasting)?x.tasting.join(' '):''; return (x.name+' '+x.sensory+' '+tast+' '+(x.origin||'')).toLowerCase().includes(q); }); }
+  const pf=document.getElementById('pastry-first'); if(pf&&pf.checked){ list=[...list].sort((a,b)=> Number(b.type==='pastry')-Number(a.type==='pastry')); }
+  if(list.length===0){ grid.innerHTML='<p style="color:var(--muted); padding:20px;">No matches — try All or clear search.</p>'; return; }
+  grid.innerHTML=list.map(p=>`
+    <div class="menu-item">
+      <img src="${esc(p.image)}" alt="${esc(p.name)}" class="menu-img">
+      <h3>${esc(p.name)}</h3>
+      <span class="price-pill">${esc(p.display)}</span>
+      <p>${esc(p.sensory)}</p>
+      <p style="font-size:0.75rem; color:var(--muted); margin-top:4px;">${esc(p.origin)} • ${esc(p.roast)} • ${esc((Array.isArray(p.tasting)?p.tasting.join(' • '):''))}</p>
+      <span class="tag">${esc(p.tag)}</span>
+      <a href="order-success.html" class="btn order-btn" onclick="addToCart('${esc(p.id)}'); return false;">Add to cart</a>
+      <a href="order-success.html" class="btn order-btn" style="background:white; color:var(--ink); margin-left:6px;">Order Now</a>
+    </div>`).join('');
+}
+window.render = render;
+window.addEventListener('scroll', ()=>{ const h=document.documentElement; const d=h.scrollHeight-h.clientHeight; const pct=d>0?(h.scrollTop/d)*100:0; const bar=document.getElementById('progress-bar'); if(bar) bar.style.width=pct+'%';});
+updateBadge(); render(); renderCart();
+</script>
+<div id="cart-backdrop" style="position:fixed; inset:0; background:rgba(0,0,0,.2); display:none; z-index:19;" onclick="document.getElementById('cart-drawer').classList.remove('open'); this.style.display='none';"></div>
+</body>
+</html>

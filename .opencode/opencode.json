@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md", "_bmad-output/specs/spec-enhanced-deja-brew/SPEC.md", "_bmad-output/planning-artifacts/architecture/architecture-enhanced-deja-brew-2026-08-27/ARCHITECTURE-SPINE.md"],
+  "references": {
+    "spec": {
+      "path": "_bmad-output/specs/spec-enhanced-deja-brew",
+      "description": "Spec contract, companions, stories, and memlog for Enhanced Deja Brew"
+    },
+    "architecture": {
+      "path": "_bmad-output/planning-artifacts/architecture",
+      "description": "Architecture spine and memlog — AD-1..5, Static-site + Progressive Enhancement"
+    }
+  }
+}
