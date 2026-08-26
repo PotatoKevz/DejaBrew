@@ -52,6 +52,21 @@
         </div>
     </section>
 
+    <section class="subscribe-strip">
+        <div class="container">
+            <div class="subscribe-card">
+                <div>
+                    <h3>Join the Brew Club — fresh beans monthly</h3>
+                    <p style="color:var(--muted); font-size:0.9rem;">Atok → Sagada → Mt. Apo on rotation. Cancel anytime. Static demo — no spam.</p>
+                </div>
+                <form onsubmit="subscribe(event)" style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <input id="brew-email" type="email" placeholder="you@email.com" required style="flex:1; min-width:180px; padding:10px 14px; border-radius:999px; border:1px solid var(--line); font-size:0.9rem;">
+                    <button class="btn btn-primary" type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <section class="section" id="featured">
         <div class="container text-center">
             <h2>Featured — Sip & Savor</h2>
@@ -142,6 +157,10 @@
   updateBadge(); window.addEventListener('storage', updateBadge);
   window.addToCart=(id)=>{ try{ let c=safeCart(); if(!id) return; const f=c.find(x=>x.id===id); if(f) f.qty=Math.max(1, (Number(f.qty)||1)+1); else c.push({id,qty:1}); localStorage.setItem('deja-brew-cart',JSON.stringify(c)); updateBadge(); const d=document.getElementById('cart-drawer'); if(d) d.classList.add('open'); }catch(e){} };
   const drawer=document.getElementById('cart-drawer'); if(drawer){ const bd=document.createElement('div'); bd.id='cart-backdrop'; bd.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.2);display:none;z-index:19'; document.body.appendChild(bd); const openDrawer=()=>{drawer.classList.add('open'); bd.style.display='block';}; const closeDrawer=()=>{drawer.classList.remove('open'); bd.style.display='none';}; window.addToCart=(id)=>{ try{ let c=safeCart(); const f=c.find(x=>x.id===id); if(f) f.qty++; else c.push({id,qty:1}); localStorage.setItem('deja-brew-cart',JSON.stringify(c)); updateBadge(); openDrawer(); }catch(e){}}; window.closeDrawer=closeDrawer; bd.addEventListener('click', closeDrawer); }
+  // research-backed: Dribbble layered warmth + Spell UI reveal on scroll
+  const io=new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); });},{threshold:0.12});
+  document.querySelectorAll('.menu-item').forEach(el=>io.observe(el));
+  window.subscribe=(e)=>{ e.preventDefault(); const input=document.getElementById('brew-email'); const email=(input&&input.value||'').trim(); if(!email||!email.includes('@')){ alert('Enter a valid email'); return; } try{ const list=JSON.parse(localStorage.getItem('deja-brew-subscribers')||'[]'); if(!list.includes(email)) list.push(email); localStorage.setItem('deja-brew-subscribers', JSON.stringify(list)); input.value=''; alert('Welcome to the Brew Club — '+email+' — demo saved locally ✓'); }catch(_){ alert('Subscribed — '+email); } };
 })();
 </script>
 </body>
