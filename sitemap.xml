@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>Main.html</loc><priority>1.0</priority></url>
+  <url><loc>MenuOrder.html</loc><priority>0.9</priority></url>
+  <url><loc>order-success.html</loc><priority>0.5</priority></url>
+  <url><loc>404.html</loc><priority>0.3</priority></url>
+</urlset>

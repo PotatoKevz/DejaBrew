@@ -52,7 +52,7 @@ flowchart LR
 
 - **Binds:** CAP-2, CAP-3, CAP-6
 - **Prevents:** Route sprawl where each story invents a new HTML page (`MenuCoffee.html`, `Pastries2.html`) and nav diverges.
-- **Rule:** Exactly three navigable documents: `Main.html` (hero + values + featured + #about + contact), `MenuOrder.html` (unified menu; was `CoffeeOrder.html`+`BakeryOrder.html`), `order-success.html`. `About.html` becomes `#about` anchor; nav `href` stays sibling-HTML (`MenuOrder.html`, `Main.html#about`). New route requires AD amendment.
+- **Rule:** Exactly four navigable documents (amended 2026-08-27 Horizon B): `Main.html` (hero + values + featured + #about + origin map + brew guide), `MenuOrder.html` (unified menu; was `CoffeeOrder.html`+`BakeryOrder.html`), `order-success.html`, `404.html` (warm editorial not-found). `About.html` becomes `#about` anchor; nav `href` stays sibling-HTML (`MenuOrder.html`, `Main.html#about`). New route requires AD amendment.
 
 ### AD-5 — Single styling source
 
@@ -83,16 +83,19 @@ flowchart LR
 
 ```
 Enhanced Deja Brew/
-  Main.html              # hero split dark, values ribbon, featured, #about, contact
-  MenuOrder.html         # unified menu: tabs All|Coffee|Pastry, filters, pill prices
+  Main.html              # hero split dark, values ribbon, featured, #about, origin map + brew guide, contact
+  MenuOrder.html         # unified menu: tabs All|Coffee|Pastry, filters (price/roast/sort/faves), pill prices
   order-success.html     # well-formed Home anchor + cross-sell + receipt
+  404.html               # warm editorial not-found (AD-4 amendment Horizon B)
   style.css              # tokens + layout + 768px switch
   data/
-    catalog.js           # export const catalog = [...] from menu-catalog.md
+    catalog.js           # export const catalog = [...] from menu-catalog.md + review
   js/
-    filters.js           # tabs + tags + search + mood
-    cart.js              # LocalStorage owner
+    filters.js           # tabs + tags + search + mood + price/roast/sort/origin/faves
+    cart.js              # LocalStorage owner deja-brew-cart
+    faves.js             # LocalStorage owner deja-brew-faves
     progress.js          # scroll-width bar
+    nav.js               # hamburger + drawer a11y
   *.jpg/.jpeg/.png       # co-located images, exact casing
   _bmad-output/
     specs/spec-enhanced-deja-brew/

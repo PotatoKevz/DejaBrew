@@ -51,16 +51,17 @@ test.describe('Deja Brew — CAP 2 Story-Fused Scroll', () => {
 test.describe('Deja Brew — CAP 3 Unified Menu', () => {
   test('MenuOrder tabs pills sensory pastry-first search', async ({ page }) => {
     await page.goto('/MenuOrder.html');
-    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(10);
+    // catalog now 31 (21 coffee + 10 pastry)
+    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(31);
     // pills
     await expect(page.locator('.price-pill').first()).toContainText('₱');
     const hasU = await page.evaluate(() => document.querySelectorAll('u').length);
     expect(hasU).toBe(0);
-    // tabs
+    // tabs — dynamic counts from catalog.js
     await page.click('button[data-filter="coffee"]');
-    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(5);
+    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(21);
     await page.click('button[data-filter="pastry"]');
-    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(5);
+    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(10);
     await page.click('button[data-filter="Gluten Free"]');
     await expect(page.locator('#menu-grid .menu-item')).toHaveCount(1);
     await expect(page.locator('#menu-grid .menu-item h3')).toContainText('Macaron');
@@ -145,7 +146,7 @@ test.describe('Deja Brew — CAP 6 Mood + Success', () => {
     const titles = await page.locator('#menu-grid .menu-item h3').allTextContents();
     expect(titles.join()).toMatch(/Espresso/);
     await page.click('text=Show me all');
-    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(10);
+    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(31);
 
     await page.goto('/order-success.html');
     // well-formed check: no malformed Home
@@ -164,5 +165,117 @@ test.describe('Deja Brew — CAP 6 Mood + Success', () => {
     // Reorder navigates to MenuOrder
     await page.click('text=Reorder');
     await expect(page).toHaveURL(/MenuOrder/);
+  });
+});
+
+test.describe('Deja Brew — Horizon A Polish & Trust', () => {
+  test('hamburger at 768px + SEO + drawer a11y + corrupted storage', async ({ page }) => {
+    await page.goto('/Main.html');
+    // SEO head
+    await expect(page.locator('meta[name="description"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:title"]')).toHaveCount(1);
+    const ld = await page.locator('script[type="application/ld+json"]').first().textContent();
+    expect(ld).toContain('CafeOrCoffeeShop');
+    // skip link exists
+    await expect(page.locator('.skip-link')).toHaveCount(1);
+    // hamburger visible at 768
+    await page.setViewportSize({ width: 768, height: 800 });
+    await expect(page.locator('#nav-toggle')).toBeVisible();
+    await page.click('#nav-toggle');
+    await expect(page.locator('#navbar-links')).toHaveClass(/open/);
+    await expect(page.locator('#nav-toggle')).toHaveAttribute('aria-expanded', 'true');
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#navbar-links')).not.toHaveClass(/open/);
+    // drawer a11y
+    await page.goto('/MenuOrder.html');
+    await page.evaluate(()=> localStorage.clear());
+    await page.click('#menu-grid .menu-item >> text=Add to cart');
+    await expect(page.locator('#cart-drawer')).toHaveAttribute('aria-hidden', 'false');
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#cart-drawer')).toHaveAttribute('aria-hidden', 'true');
+    // corrupted storage clears cleanly
+    await page.evaluate(()=> localStorage.setItem('deja-brew-cart', ']]]'));
+    await page.reload();
+    await expect(page.locator('#cart-badge')).toBeHidden();
+    const badgeText = await page.evaluate(()=> localStorage.getItem('deja-brew-cart'));
+    expect(badgeText).toBeNull(); // bad key removed
+    // sitemap reachable (via navigation check)
+    const resp = await page.request.get('/sitemap.xml').catch(()=> null);
+    if (resp) expect(resp.status()).toBe(200);
+  });
+});
+
+test.describe('Deja Brew — Horizon B Discovery & Delight', () => {
+  test('origin map + brew guide on Main', async ({ page }) => {
+    await page.goto('/Main.html');
+    await expect(page.locator('#origin-map')).toBeVisible();
+    await expect(page.locator('.origin-pin')).toHaveCount(6);
+    await expect(page.locator('.origin-pin', { hasText: 'Benguet' })).toBeVisible();
+    await expect(page.locator('#brew-guide')).toBeVisible();
+    await expect(page.locator('.brew-card')).toHaveCount(3);
+    // pin href carries query
+    const href = await page.locator('.origin-pin', { hasText: 'Atok' }).getAttribute('href');
+    expect(href).toContain('origin=Atok');
+  });
+  test('smart filters price/roast/sort + query origin', async ({ page }) => {
+    await page.goto('/MenuOrder.html?origin=Benguet');
+    // origin query filters to Benguet only (M-C-01,06,18,19) = 4
+    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(4);
+    await page.goto('/MenuOrder.html');
+    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(31);
+    // price filter narrows — use max 330 to avoid empty combo with Light
+    await page.locator('#price-max').evaluate((el, v)=> { el.value=v; el.dispatchEvent(new Event('input',{bubbles:true}));}, '330');
+    // Light roast only (pure roast filter)
+    await page.click('button[data-roast="Light"]');
+    const lightCount = await page.locator('#menu-grid .menu-item').count();
+    expect(lightCount).toBeGreaterThan(0);
+    expect(lightCount).toBeLessThan(31);
+    // sort price asc
+    await page.selectOption('#sort-by', 'price-asc');
+    const prices = await page.locator('#menu-grid .menu-item .price-pill').allTextContents();
+    const nums = prices.map(p=> Number(p.replace(/[^\d.]/g,''))).filter(n=> Number.isFinite(n));
+    for(let i=1;i<nums.length;i++) expect(nums[i]).toBeGreaterThanOrEqual(nums[i-1]);
+    await page.click('text=Clear');
+    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(31);
+  });
+  test('faves heart persist + 404 + review stars', async ({ page }) => {
+    await page.goto('/MenuOrder.html');
+    await page.evaluate(()=> localStorage.clear());
+    await page.reload();
+    // fave first item — force to avoid image intercept at edge
+    await page.locator('#menu-grid .menu-item button[aria-pressed]').first().click({ force: true });
+    await page.reload();
+    // fave persists
+    const pressed = await page.locator('#menu-grid .menu-item button[aria-pressed="true"]').count();
+    expect(pressed).toBe(1);
+    await page.click('#filter-faves');
+    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(1);
+    await page.click('#filter-faves'); // toggle off
+    await expect(page.locator('#menu-grid .menu-item')).toHaveCount(31);
+    // review stars visible
+    await expect(page.locator('#menu-grid .menu-item').first().locator('text=★')).toBeVisible();
+    // 404
+    await page.goto('/404.html');
+    await expect(page.locator('text=Lost your brew?')).toBeVisible();
+    await expect(page.locator('a[href="MenuOrder.html"]').first()).toBeVisible();
+    await expect(page.locator('a[href="MenuOrder.html"]')).toHaveCount(2);
+    const resp404 = await page.request.get('/404.html');
+    expect(resp404.status()).toBe(200);
+  });
+});
+
+test.describe('Deja Brew — Horizon C Scale', () => {
+  test('manifest + verify scripts + casing guard', async ({ page }) => {
+    await page.goto('/Main.html');
+    await expect(page.locator('link[rel="manifest"]')).toHaveCount(1);
+    const man = await page.request.get('/manifest.json');
+    expect(man.status()).toBe(200);
+    const json = await man.json();
+    expect(json.name).toContain('Deja Brew');
+    expect(json.start_url).toBe('Main.html');
+    const robots = await page.request.get('/robots.txt');
+    expect(robots.status()).toBe(200);
+    const sitemap = await page.request.get('/sitemap.xml');
+    expect(sitemap.status()).toBe(200);
   });
 });

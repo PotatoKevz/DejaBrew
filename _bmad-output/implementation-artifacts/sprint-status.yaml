@@ -20,6 +20,11 @@ development_status:
   1-6-enriched-catalog-and-footer: done
   1-7-mood-picker-and-success-extension: done
   epic-1-retrospective: done
+  epic-2: done
+  2-1-horizon-a-polish-trust: done
+  2-2-horizon-b-discovery: done
+  2-3-horizon-c-scale: done
+  epic-2-retrospective: pending
 
 action_items:
   - id: epic-1-retro-item-1-preconnect-fonts

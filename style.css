@@ -322,6 +322,20 @@ a { text-decoration: none; color: inherit; }
 
 .social-icons{ margin-top:12px; }
 .social-icons a{ color:white; margin:0 8px; font-size:1.15rem; }
+.skip-link{position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden}
+.skip-link:focus{left:12px; top:12px; width:auto; height:auto; padding:8px 12px; background:var(--latte); color:var(--ink); border-radius:999px; z-index:30; font-weight:700}
+:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
+.nav-toggle{display:none; background:transparent; border:1px solid rgba(232,218,178,.35); color:var(--latte); border-radius:8px; padding:8px 10px; cursor:pointer; font-size:1rem}
+.nav-toggle:focus-visible{outline:2px solid var(--amber)}
+#navbar-links.open{display:flex}
+@media (max-width: 880px){
+  .nav-toggle{display:inline-flex; align-items:center; justify-content:center}
+  #navbar-links{position:fixed; inset:56px 0 auto 0; background:var(--paper); border-bottom:1px solid var(--line); flex-direction:column; gap:0; padding:10px 0; display:none; box-shadow:0 12px 24px rgba(51,51,51,.12)}
+  #navbar-links.open{display:flex}
+  #navbar-links li{padding:10px 18px}
+  #navbar-links a{color:var(--ink); font-weight:600}
+  #navbar-links a:hover{color:var(--ink)}
+}
 .social-icons a:hover { color: var(--amber); }
 
 /* Responsive Design */
@@ -415,4 +429,12 @@ body::after{
 .btn:hover{ transform: translateY(-1px); }
 .btn:active{ transform: translateY(0); }
 .footer{ background: linear-gradient(180deg, var(--ink) 0%, #1e1e1e 100%); border-top: 1px solid rgba(201,122,90,.18); }
+.origin-grid{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+.origin-pin{flex:1 1 140px; max-width:160px; padding:12px; background:white; border:1px solid var(--line); border-radius:12px; text-align:center; font-weight:600; font-size:0.9rem; color:var(--ink); box-shadow:var(--shadow); transition:transform 0.2s, border-color 0.2s}
+.origin-pin:hover{transform:translateY(-2px); border-color:var(--latte)}
+.pin-dot{display:inline-block; width:10px; height:10px; background:var(--amber); border-radius:50%; margin-right:6px; box-shadow:0 0 0 4px rgba(240,165,0,.18)}
+.brew-grid{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+.brew-card{flex:1 1 160px; max-width:260px; background:white; border:1px solid var(--line); border-radius:12px; padding:16px; text-align:center; box-shadow:var(--shadow)}
+.brew-card h4{font-family:Inter, sans-serif; font-size:0.9rem; color:var(--ink); margin-bottom:4px}
+.brew-card p{font-size:0.85rem; color:var(--muted)}
 .tag{ box-shadow: 0 1px 0 rgba(51,51,51,.06); }

@@ -4,24 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deja Brew Coffee Shop — Warm Editorial</title>
+    <meta name="description" content="Deja Brew — warm editorial specialty café in the Philippines. Benguet to Mt. Apo beans, fresh pastries daily. Explore menu, find your vibe.">
+    <meta property="og:title" content="Deja Brew Coffee Shop — Warm Editorial">
+    <meta property="og:description" content="Cozy specialty café — single-origin beans, fresh pastries, story-fused scroll. Order pickup, brew with craft.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="Coffeeshop.jpeg">
+    <meta property="og:url" content="Main.html">
+    <link rel="preload" as="image" href="Coffeeshop.jpeg" fetchpriority="high">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"CafeOrCoffeeShop","name":"Deja Brew Coffee Shop","description":"Warm editorial specialty café — community, quality, craft.","servesCuisine":"Coffee, Pastry","priceRange":"₱","address":{"@type":"PostalAddress","addressLocality":"Philippines"},"openingHours":"Mo-Su 07:00-20:00"}</script>
 </head>
 <body>
-    <nav class="navbar">
+    <a class="skip-link" href="#hero">Skip to content</a>
+    <nav class="navbar" aria-label="Primary">
         <div class="container">
             <a class="navbar-brand" href="Main.html">
                 <i class="fas fa-mug-hot"></i> Deja Brew
             </a>
-            <ul class="navbar-links">
-                <li><a href="MenuOrder.html">Menu</a> <span id="cart-badge" class="cart-badge" style="display:none">0</span></li>
+            <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="navbar-links" aria-label="Open navigation">☰</button>
+            <ul id="navbar-links" class="navbar-links">
+                <li><a href="MenuOrder.html">Menu</a> <span id="cart-badge" class="cart-badge" style="display:none" aria-live="polite" aria-atomic="true">0</span></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
+                <li><a id="cart-trigger" href="javascript:void(0)">Cart</a></li>
             </ul>
         </div>
-        <div id="progress-bar"></div>
+        <div id="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
     </nav>
 
     <section class="intro" id="hero" style="position:relative; overflow:hidden; isolation:isolate;">
@@ -75,27 +87,27 @@
             <p style="color:var(--muted); margin-top:6px;">Six favorites to start your story</p>
             <div class="menu-grid" style="margin-top:22px;">
                 <a href="MenuOrder.html" class="menu-item" style="text-decoration:none; color:inherit;">
-                    <img src="espresso-coffee.png" alt="Espresso" class="menu-img">
+                    <img src="espresso-coffee.png" alt="Espresso" class="menu-img" loading="lazy" onerror="this.onerror=null;this.src='Kape.jpg'">
                     <h3>Espresso</h3><span class="price-pill">₱125.00</span><p>Dark roast, brown sugar snap</p><span class="tag">Craft</span>
                 </a>
                 <a href="MenuOrder.html" class="menu-item" style="text-decoration:none; color:inherit;">
-                    <img src="Latte.jpeg" alt="Latte" class="menu-img">
+                    <img src="Latte.jpeg" alt="Latte" class="menu-img" loading="lazy" onerror="this.onerror=null;this.src='Kape.jpg'">
                     <h3>Latte</h3><span class="price-pill">₱135.00</span><p>Creamy, steamed milk cradle</p><span class="tag">Community</span>
                 </a>
                 <a href="MenuOrder.html" class="menu-item" style="text-decoration:none; color:inherit;">
-                    <img src="Cappuccino.jpg" alt="Cappuccino" class="menu-img">
+                    <img src="Cappuccino.jpg" alt="Cappuccino" class="menu-img" loading="lazy" onerror="this.onerror=null;this.src='Kape.jpg'">
                     <h3>Cappuccino</h3><span class="price-pill">₱143.73</span><p>Rich, foamy classic</p><span class="tag">Craft</span>
                 </a>
                 <a href="MenuOrder.html" class="menu-item" style="text-decoration:none; color:inherit;">
-                    <img src="Kwasant.jpg" alt="Croissant" class="menu-img">
-                    <h3>Croissant</h3><span class="price-pill">₱85.00</span><p>Flaky, buttery, fresh</p><span class="tag">Craft</span>
+                    <img src="Kwasant.jpg" alt="Croissant" class="menu-img" loading="lazy" onerror="this.onerror=null;this.src='Kape.jpg'">
+                    <h3>Croissant</h3><span class="price-pill">₱85.00</span><p>Flaky, buttery, fresh-baked</p><span class="tag">Craft</span>
                 </a>
                 <a href="MenuOrder.html" class="menu-item" style="text-decoration:none; color:inherit;">
-                    <img src="Muffin.jpg" alt="Muffin" class="menu-img">
+                    <img src="Muffin.jpg" alt="Muffin" class="menu-img" loading="lazy" onerror="this.onerror=null;this.src='Kape.jpg'">
                     <h3>Muffin</h3><span class="price-pill">₱35.00</span><p>Soft, moist, flavor burst</p><span class="tag">Community</span>
                 </a>
                 <a href="MenuOrder.html" class="menu-item" style="text-decoration:none; color:inherit;">
-                    <img src="Macaron.jpg" alt="Macaron" class="menu-img">
+                    <img src="Macaron.jpg" alt="Macaron" class="menu-img" loading="lazy" onerror="this.onerror=null;this.src='Kape.jpg'">
                     <h3>Macaron</h3><span class="price-pill">₱330.00 /box</span><p>Delicate, colorful sweet</p><span class="tag">Gluten Free</span>
                 </a>
             </div>
@@ -117,6 +129,26 @@
                     <p>1. Community — welcoming space for all.<br>2. Quality — premium ingredients.<br>3. Craftsmanship — passion in every serve.<br>4. Innovation — fresh experiences always.</p>
                 </div>
                 <div><img src="Coffeeshop.jpeg" alt="Deja Brew Coffee Shop" class="img-fluid"></div>
+            </div>
+            <div id="origin-map" class="origin-map" style="margin-top:28px;">
+                <h3 style="text-align:center; margin-bottom:12px;">Origins — from mountain to cup</h3>
+                <p style="text-align:center; color:var(--muted); font-size:0.9rem; margin-bottom:14px;">Tap a pin → filter the menu by that origin</p>
+                <div class="origin-grid">
+                    <a href="MenuOrder.html?origin=Benguet" class="origin-pin" data-origin="Benguet"><span class="pin-dot"></span> Benguet <small>Star</small></a>
+                    <a href="MenuOrder.html?origin=Atok" class="origin-pin" data-origin="Atok"><span class="pin-dot"></span> Atok <small>Honey</small></a>
+                    <a href="MenuOrder.html?origin=Sagada" class="origin-pin" data-origin="Sagada"><span class="pin-dot"></span> Sagada <small>Latte</small></a>
+                    <a href="MenuOrder.html?origin=Mt. Apo" class="origin-pin" data-origin="Mt. Apo"><span class="pin-dot"></span> Mt. Apo <small>Natural</small></a>
+                    <a href="MenuOrder.html?origin=Batangas" class="origin-pin" data-origin="Batangas"><span class="pin-dot"></span> Batangas <small>Barako</small></a>
+                    <a href="MenuOrder.html?origin=Cavite" class="origin-pin" data-origin="Cavite"><span class="pin-dot"></span> Cavite <small>Excelsa</small></a>
+                </div>
+            </div>
+            <div id="brew-guide" class="brew-guide" style="margin-top:26px;">
+                <h3 style="text-align:center; margin-bottom:12px;">Brew Guide — 3 steps</h3>
+                <div class="brew-grid">
+                    <div class="brew-card"><h4>1. Dose</h4><p>18g single-origin, medium grind</p></div>
+                    <div class="brew-card"><h4>2. Bloom</h4><p>40ml at 93°C, swirl 30s</p></div>
+                    <div class="brew-card"><h4>3. Pour</h4><p>To 220ml, sip at 4.5 min</p></div>
+                </div>
             </div>
         </div>
     </section>
@@ -144,28 +176,25 @@
         </div>
     </footer>
 
-    <div id="cart-drawer" class="cart-drawer">
-        <h3 style="font-family:Inter, sans-serif; font-size:1.05rem;">Your cart <span id="cart-count">0</span></h3>
+    <div id="cart-drawer" class="cart-drawer" role="dialog" aria-modal="true" aria-label="Shopping cart" aria-hidden="true">
+        <h3 style="font-family:Inter, sans-serif; font-size:1.05rem;">Your cart <span id="cart-count" aria-live="polite">0</span></h3>
         <div id="cart-items" style="margin-top:14px;"></div>
-        <a href="order-success.html" class="btn btn-primary" style="margin-top:16px; display:block; text-align:center;" onclick="try{localStorage.removeItem('deja-brew-cart')}catch(e){}">Order Now</a>
-        <button class="btn" style="margin-top:8px; width:100%;" onclick="document.getElementById('cart-drawer').classList.remove('open')">Continue browsing</button>
+        <a href="order-success.html" class="btn btn-primary" style="margin-top:16px; display:block; text-align:center;">Order Now</a>
+        <button class="btn" style="margin-top:8px; width:100%;" onclick="window.closeDrawer&&window.closeDrawer()">Continue browsing</button>
     </div>
-<script>
-(function(){
-  const bar = document.getElementById('progress-bar');
-  window.addEventListener('scroll', ()=>{ const h=document.documentElement; const d=h.scrollHeight-h.clientHeight; const pct=d>0?(h.scrollTop/d)*100:0; if(bar) bar.style.width=pct+'%';});
-  function safeCart(){ try{ const v=JSON.parse(localStorage.getItem('deja-brew-cart')||'[]'); return Array.isArray(v)?v:[];}catch(e){ try{localStorage.removeItem('deja-brew-cart');}catch(_){} return [];}}
-  function updateBadge(){ let c=[]; try{c=safeCart();}catch(e){c=[];} const sum=(Array.isArray(c)?c:[]).reduce((a,b)=>a+(Number(b.qty)||0),0); const b=document.getElementById('cart-badge'); if(b){ if(sum>0){b.textContent=sum; b.style.display='inline-flex';} else b.style.display='none'; } const cc=document.getElementById('cart-count'); if(cc) cc.textContent=sum; }
-  updateBadge(); window.addEventListener('storage', updateBadge);
-  window.addToCart=(id)=>{ try{ let c=safeCart(); if(!id) return; const f=c.find(x=>x.id===id); if(f) f.qty=Math.max(1, (Number(f.qty)||1)+1); else c.push({id,qty:1}); localStorage.setItem('deja-brew-cart',JSON.stringify(c)); updateBadge(); const d=document.getElementById('cart-drawer'); if(d) d.classList.add('open'); }catch(e){} };
-  const drawer=document.getElementById('cart-drawer'); if(drawer){ const bd=document.createElement('div'); bd.id='cart-backdrop'; bd.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.2);display:none;z-index:19'; document.body.appendChild(bd); const openDrawer=()=>{drawer.classList.add('open'); bd.style.display='block';}; const closeDrawer=()=>{drawer.classList.remove('open'); bd.style.display='none';}; window.addToCart=(id)=>{ try{ let c=safeCart(); const f=c.find(x=>x.id===id); if(f) f.qty++; else c.push({id,qty:1}); localStorage.setItem('deja-brew-cart',JSON.stringify(c)); updateBadge(); openDrawer(); }catch(e){}}; window.closeDrawer=closeDrawer; bd.addEventListener('click', closeDrawer); }
-  // research-backed: Dribbble layered warmth + Spell UI reveal on scroll
+    <div id="cart-backdrop" style="position:fixed;inset:0;background:rgba(0,0,0,.2);display:none;z-index:19;" aria-hidden="true"></div>
+<script type="module">
+import { cart } from './js/cart.js';
+import { initProgress } from './js/progress.js';
+import { initNav } from './js/nav.js';
+initProgress('#progress-bar');
+initNav();
+function updateBadge(){ const sum=cart.count(); const b=document.getElementById('cart-badge'); if(b){ if(sum>0){b.textContent=sum; b.style.display='inline-flex';} else b.style.display='none'; } const cc=document.getElementById('cart-count'); if(cc) cc.textContent=sum; const bar=document.getElementById('progress-bar'); if(bar) bar.setAttribute('aria-valuenow', String(Math.round(Number(bar.style.width.replace('%',''))||0))); }
+updateBadge(); window.addEventListener('cart:updated', updateBadge); window.addEventListener('storage', updateBadge);
+window.addToCart=(id)=>{ cart.add(id); updateBadge(); if(window.openDrawer) window.openDrawer(); };
+  // reveal + magnetic + dust + watermark (progress + nav handled by modules)
   const io=new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); });},{threshold:0.12});
   document.querySelectorAll('.menu-item').forEach(el=>io.observe(el));
-  window.subscribe=(e)=>{ e.preventDefault(); const input=document.getElementById('brew-email'); const email=(input&&input.value||'').trim(); if(!email||!email.includes('@')){ alert('Enter a valid email'); return; } try{ const list=JSON.parse(localStorage.getItem('deja-brew-subscribers')||'[]'); if(!list.includes(email)) list.push(email); localStorage.setItem('deja-brew-subscribers', JSON.stringify(list)); input.value=''; alert('Welcome to the Brew Club — '+email+' — demo saved locally ✓'); }catch(_){ alert('Subscribed — '+email); } };
-  // alive: magnetic buttons, dust steam, watermark parallax, nav scrolled
-  const navEl=document.querySelector('.navbar');
-  window.addEventListener('scroll', ()=>{ if(window.scrollY>24) navEl.classList.add('scrolled'); else navEl.classList.remove('scrolled'); }, {passive:true});
   // magnetic
   document.querySelectorAll('[data-magnetic]').forEach(wrap=>{
     const inner=wrap.querySelector('.magnetic-inner');
@@ -193,7 +222,7 @@
   // watermark parallax
   const wm=document.querySelector('.hero-watermark');
   if(wm) window.addEventListener('scroll', ()=>{ const y=window.scrollY*0.18; wm.style.transform=`translate(-50%, calc(-50% + ${y}px))`; }, {passive:true});
-})();
+
 </script>
 </body>
 </html>

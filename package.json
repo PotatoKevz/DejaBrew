@@ -2,10 +2,25 @@
   "name": "enhanced-deja-brew",
   "private": true,
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 3000",
+    "serve": "vite preview --port 3000",
     "test": "npx playwright test",
-    "test:e2e": "npx playwright test tests/e2e/deja-brew.spec.js"
+    "test:e2e": "npx playwright test tests/e2e/deja-brew.spec.js",
+    "check:catalog": "node tools/check-catalog.js",
+    "check:casing": "node tools/check-casing.js",
+    "verify": "npm run check:catalog && npm run check:casing && npx playwright test --reporter=list"
   },
   "devDependencies": {
-    "@playwright/test": "^1.48.0"
+    "@playwright/test": "^1.48.0",
+    "@vitejs/plugin-react": "^6.1.0",
+    "vite": "^8.2.2"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2",
+    "three": "^0.185.1"
   }
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost your brew? — Deja Brew 404</title>
+    <meta name="description" content="404 — warm editorial not found. Back to menu for a fresh brew.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <a class="skip-link" href="#lost">Skip to content</a>
+    <nav class="navbar" aria-label="Primary">
+        <div class="container">
+            <a class="navbar-brand" href="Main.html"><i class="fas fa-mug-hot"></i> Deja Brew</a>
+            <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="navbar-links" aria-label="Open navigation">☰</button>
+            <ul id="navbar-links" class="navbar-links">
+                <li><a href="Main.html">Home</a></li>
+                <li><a href="MenuOrder.html">Menu</a></li>
+                <li><a href="Main.html#about">About</a></li>
+            </ul>
+        </div>
+        <div id="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+    </nav>
+    <section id="lost" class="section text-center">
+        <div class="container">
+            <h1 style="font-size:4.5rem; color:var(--ink);">Lost your brew?</h1>
+            <p style="color:var(--muted); margin-top:10px;">404 — that page steamed away. Let's get you back to something warm.</p>
+            <div style="margin-top:18px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                <a href="MenuOrder.html" class="btn btn-primary">Browse Menu →</a>
+                <a href="Main.html" class="btn">Back Home</a>
+            </div>
+            <p style="margin-top:18px; font-size:0.85rem; color:var(--muted);">Tip: try a mood — Cozy & Creamy or Bold & Strong on the menu.</p>
+        </div>
+    </section>
+    <footer class="footer"><p>&copy; 2024 Deja Brew Coffee Shop. All Rights Reserved.</p></footer>
+    <script type="module">
+        import { initProgress } from './js/progress.js';
+        import { initNav } from './js/nav.js';
+        initProgress('#progress-bar');
+        initNav();
+    </script>
+</body>
+</html>
